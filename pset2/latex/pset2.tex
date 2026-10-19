@@ -1,0 +1,70 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+%opening
+\title{Homework 2}
+\author{Marwan Kallal}
+
+\begin{document}
+
+\maketitle
+
+\section{}
+\subsection*{(a)}
+All computations are done under the assumption that "moving with respect to the transmitter at 60 km/h" means that v in the figure is 60km/h.\\
+We can compute $\theta$ from the equation on slide 9 of Module 2 pt. 3 to be:\\ $180^\circ - 30^\circ = 150^\circ$\\
+We can convert the speed from km/h to m/s: $ (\frac{60\text{km}}{1\text{h}}) \cdot \frac{1000}{3600} = 16.\overline{6}\frac{\text{m}}{\text{s}}$
+
+Doppler shift:
+\begin{align*}
+	v =& -\frac{\text{v}\cdot f}{c}\cos(\theta)\\
+	v =& -\frac{16.\overline{6} \cdot 1800\cdot10^{6}}{3\cdot10^8}\cos(150^\circ)\\
+	v =& - 100\cdot -0.866\\
+	v =& 86.6 \text{Hz}
+\end{align*}
+
+This is a positive Doppler shift, so it is additive, and the received frequency is $1,800,000,086.6$ Hz.
+
+\subsection*{(b)}
+Coherence time is the amount of time that a channel impulse response can be considered non-varying (paraphrased from slides).\\
+Using equations from the slides:\\
+Maximum Doppler shift: $v_\textit{max} = \text{v} \cdot \frac{f}{c} = 100$ Hz (from part (a)) \\
+Doppler spread: $B_d = 2\cdot v_{max} = 200$Hz\\
+Coherence time: $T_c \approx \frac{1}{200} \approx 5$ms 
+
+\subsection*{(c)}
+S1: This does not convert the 60 km/h to m/s. Should be 100Hz. Revealed by units. \\\\
+S2: Correct, it is reliant on $r_s$, $r_{rms}$, and $v_{max}$.\\\\
+S3: $\sigma$ in this context is the Rayleigh scale factor, so $\sigma^2$ is not the variance. It is not relevant to the solution anyway, since we are concerned with $\rho$ being a ratio as shown in S4. Revealed by checking definitions.\\\\
+S4: The 10dB difference is in the amplitude of the RMS, so it should be $10^{-10/20} = 0.316$, and $\rho^2 = 10^{-10/10} = 0.1$. Revealed by unit conversion check. \\\\
+S5: This uses the incorrect $v_{max}$ value from S1 and $\rho$ value from S4. Should be $D_F=\frac{e^{0.1} - 1}{\sqrt{2\pi}{(100)\cdot 0.316}} = \frac{0.01005}{79.2095} = 1.328$ms. Revealed by previous steps.\\\\
+S6: S5 computed the average fade duration, but this does not happen once per second. We need to compute the level crossing rate to determine the fraction of time it remains in the fade. $N(r_s) = \sqrt{2\pi}v_{max}\rho e^{-\rho^2} =  \sqrt{2\pi}(100)0.316 e^{-0.1} = 71.6717$ fades/s. This means that it spends $71.6717 \cdot 0.001328 = 0.095$s or $9.5\%$ of each second in a fade, which is quite high, we would likely need a higher fading margin.
+\\
+Revealed by definition.\\\\
+S7: While this is true, it is proportional to the level crossing rate, which means that though the fades shorten, the frequency of fades increases at the same rate. Revealed by definitions.\\\\
+
+A plausible looking number does not indicate that it is correct because you can still obtain one whilst making a series of mistakes that bring you to a number that is close, or looks correct, without actually calculating the thing you think you are calculating.
+
+\section{}
+\subsection*{(a)}
+In flat fading, the bandwidth of the signal is much smaller than the coherence bandwidth, and all frequencies in the signal experience the same channel, so the signal will not experience distortion, including from delay dispersion.
+
+\subsection*{(b)}
+Here we want to find the maximum delay spread $\tau_d$ that will maintain flat fading.\\
+We first want to find the minimum coherence bandwidth that will maintain flat fading, and in this case we will assume that as long as the signal bandwidth is smaller than the coherence bandwidth, we will maintain flat fading.\\
+Because we do not know the frequency correlation, we will use the inequality $B_c \gtrsim \frac{1}{2\pi \tau_d}$ to find the maximum delay spread for a signal bandwidth of 600kHz.
+
+\begin{align*}
+	B_c \gtrsim& \frac{1}{2\pi \tau_d}\\
+	600000 \gtrsim& 2\pi \tau_d\\
+	\tau_d \gtrsim& \frac{1}{2\pi600000}\\
+	\tau_d \gtrsim& 265.3 \text{ns}
+\end{align*}
+
+This indicates that the maximum delay spread to maintain a flat fading channel is $265.3$ns.
+
+\section*{Verification Appendix}
+I did not use standalone AI tools for this assignment, but google AI summary was shown when googling. For example: "latex repeating decimal", "doppler calculation", "10db amplitude vs power". I had initially marked S4 of 1(c) as correct, but rereading the slides reminded me that rms amplitude needs a different calculation.
+
+\end{document}
