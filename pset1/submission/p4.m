@@ -44,8 +44,8 @@ for d_idx = 1:length(datasetB.d_m)
     dsetB_model_Ls(d_idx) = dsetB_PL0 + 10 * nB *log10(datasetB.d_m(d_idx) / dsetB_d0);
 end
 
-stdA = sqrt((1 / length(datasetA.d_m)) * sum(datasetA.L_dB - dsetA_model_Ls))
-stdB = sqrt((1 / length(datasetB.d_m)) * sum(datasetB.L_dB - dsetB_model_Ls))
+stdA = sqrt((1 / length(datasetA.d_m)) * sum((datasetA.L_dB - dsetA_model_Ls).^2))
+stdB = sqrt((1 / length(datasetB.d_m)) * sum((datasetB.L_dB - dsetB_model_Ls).^2))
 
 figure(1);
 subplot(2,1,1);

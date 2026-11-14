@@ -1,0 +1,126 @@
+\documentclass[]{article}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+%opening
+\title{Homework 4}
+\author{Marwan Kallal}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{}
+	\begin{verbatim}
+		function [st1, st2] = tx_MISO(d1,d2)
+		% st1 and st2: the transmitted signal matrices 
+		%    (2 × Nb, one column per block) at 
+		%    time instant 1 and 2, respectively
+		% d1 and d2: row vectors (1 × Nb) with the 
+		%    transmitted complex baseband data symbols
+		
+		% Check lengths are the same
+		if (length(d1) ~= length(d2))
+		error("Symbol vectors different sizes");
+		end
+		
+		Nb = length(d1);
+		
+		st1 = zeros(2,Nb);
+		st2 = zeros(2,Nb);
+		
+		% Encode every pair of symbols
+		for sym_idx = 1:Nb
+		st1(:,sym_idx) = (1/sqrt(2)) * [d1(sym_idx); d2(sym_idx)];
+		st2(:,sym_idx) = (1/sqrt(2)) * [-conj(d2(sym_idx)), conj(d1(sym_idx))];
+		end
+	\end{verbatim}
+	
+	\section{}
+	\begin{verbatim}
+		function [d1r,d2r,alpha]=rx_MISO(rt1,rt2,h1,h2)
+		% d1r and d2r: the recovered complex baseband data 
+		%   symbols (1 × Nb row vectors)
+		% alpha: the scale factor obtained from the matrix 
+		%   implementation of the Alamouti code in the receiver
+		% rt1 and rt2: the signals received at time instants 1 and 2
+		% h1 and h2: the complex channel gains of the channel 
+		%   for transmit antenna 1 and 2, respectively
+		
+		H = (1/sqrt(2)) * [h1, h2; conj(h2), -conj(h1)];
+		
+		dr = H' * [rt1; conj(rt2)];
+		
+		alpha = (abs(h1)^2 + abs(h2)^2) / 2;
+		
+		d1r = dr(1, : ) / alpha;
+		d2r = dr(2, : ) / alpha;
+	\end{verbatim}
+	
+	\section{}
+	\subsection*{(a)}
+	\begin{center}
+		\begin{tabular}{ |c|c| } 
+			\hline
+			& $\alpha$ \\
+			\hline
+			A & $0.32125$ \\
+			B & $0.81$ \\
+			C & $0.02125$ \\
+			D & $0.81$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\begin{center}
+		\begin{tabular}{ |c||c|c| } 
+			\hline
+			  & $\alpha d_1$ & $\alpha d_2$ \\
+			\hline
+			A & $0.32125+0.32125i$ & $-0.32125+0.32125i$ \\
+			B & $0.81+0.81i$ & $-0.81+0.81i$ \\
+			C & $0.02125+0.02125i$ & $-0.02125+0.02125i$ \\
+			D & $0.81+0.81i$ & $-0.81+0.81i$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	
+	For $H = \begin{bmatrix} h_1 & h_2 \\ h_2^* & -h_1^* \end{bmatrix}$
+	and
+	$H^T = \begin{bmatrix}h_1^* & h_2 \\ h_2^* & -h_1\end{bmatrix}$
+	
+	 we can show that\\
+	$H^TH = \begin{bmatrix} h_1 h_1^* + h_2h_2^* & h_1h_2 + h2 (-h1) \\ h_2^*h_1^* + (-h_1^*)h_2^* & h_2^*h_2 + (-h_1^*)(-h_1) \end{bmatrix}$\\
+	
+	$H^TH = \begin{bmatrix} h_1 h_1* + h_2h_2^* & 0 \\ 0 & h_2^*h_2 + h_1^*h_1 \end{bmatrix}$
+\\
+	$H^TH = \begin{bmatrix} |h_1|^2 + |h_2|^2 & 0 \\ 0 & |h_2|^2 + |h_1|^2 \end{bmatrix} = \alpha I$ where $\alpha = |h_1|^2 + |h_2|^2$, which is only dependent on $h_1$ and $h_2$
+	
+	\subsection*{(b)}
+	\begin{center}
+		\begin{tabular}{ |c||c|c| } 
+			\hline
+			& SNR Theory & SNR Computed \\
+			\hline
+			A & 15.0684 & 15.0507 \\
+			B & 19.0849 & 19.1451\\
+			C & 3.2736 & 3.2372 \\
+			D & 19.0849 & 19.1067\\
+			\hline
+		\end{tabular}
+	\end{center}
+	\section{}
+	\subsection*{(a)}
+	A : $\alpha = 0.32125$, $|h_1|^2 = 0.64$, $|h_2|^2 = 0.0025$ \\
+	B : $\alpha = 0.81$, $|h_1|^2 = 0.81$, $|h_2|^2 = 0.81$\\
+	C : $\alpha = 0.02125$, $|h_1|^2 = 0.0025$, $|h_2|^2 = 0.04$ \\
+	D : $\alpha = 0.81$, $|h_1|^2 = 0.81$, $|h_2|^2 = 0.81$ \\
+	This improves the total channel gain compared to a single antenna in a deep fade (A, C), and does not affect the channel gain if they are both identical. Because the transmitter does not know what the channel is, transmitting on both in this manner allows you to recover from fades in one place by transmitting on both, without adding code overhead (2 symbols are transmitted over 2 symbol periods).
+	\subsection*{(b)}
+	Alpha is identical, and the scatter plots look almost identical. No, they are not rotated. Because the alpha is only dependent on the magnitude ($|h_i|^2$) and not the phase, we can recover the phase. If both transmitted the same symbol at the same time, then the channels will sum together, and potentially cancel out the symbol. Alamouti fixes this problem by effectively combining channel power instead ($|h_i|^2$).
+	\subsection*{(c)}
+	The benefit comes from potentially having one antenna not in a deep fade if the other one, allowing power to make it through. In a single antenna system, you would have a probability of 0.01 of being in a deep fade. With a 2 antenna system, you would have a probability of $0.01 \cdot 0.01 = 0.0001$ of low gain due to double fade. Scenario A has only a single fade, and has a much better SNR than Scenario C, which is in the double fade condition. The benefit would not hold if $h_1$ and $h_2$ faded together.
+	
+	\section*{Verification Appendix}
+	I did not use a standalone AI tool, but when googling the "AI Summary" was present. Examples include "conjugate transpose of matrix", "latex table", "matlab force axis in front". I had originally added the alpha scaling to the \verb|rx_MIMO| function. I detected the issue when my computed SNRs were wrong, and would not go to infinity (or large numbers) on noiseless runs.
+\end{document}

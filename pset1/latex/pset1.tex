@@ -213,10 +213,34 @@ Line 33 and 58, these caused the fit lines to very clearly not fit.
 
 \section{Verification Appendix}
 \subsection{}
-I did not use an AI tool for this assignment. 
+I did not use a standalone AI tool for this assignment, but there were "AI Overviews" presented when googling. 
 \subsection{}
-N/A
+Examples of googled "AI Overviews":\\
+"matlab subfigure"\\
+"matlab sum Array indices must be positive integers or logical values"\\
+"latex table"\\
+"log division"\\
+"fspl link budget distance"\\
 \subsection{}
+(a).ii:
+\begin{align*}
+	PL_fs|dB &= 32.45 + 20 \log_{10}(f_c(\text{MHz})) + 20 \log_{10}(d(\text{km})) \\
+	&= 32.45 + 20 \log_{10}(900) + 20 \log_{10}(0.1) \\
+	&= 32.45 + 59.08 + (-20) \\
+	&= 71.53 \text{dB}
+\end{align*}
+
+(b).iii\\
+$900$MHz: $\frac{2 \cdot 0.5^2}{c/900 \cdot 10^{6}} = 1.5$m\\
+$2.6$GHz: $\frac{2 \cdot 0.5^2}{c/2.6 \cdot 10^{9}} = 4.33$m\\
+$28$GHz: $\frac{2 \cdot 0.5^2}{c/28 \cdot 10^{9}} = 46.67$m\\\\
+
+(c) for $n=3$
+\begin{align*}
+	100 \cdot 10^{\frac{71.47}{10n}} &\geq R\\
+	100 \cdot 10^{\frac{71.47}{10 \cdot 3}} &\geq R\\
+	24118 &\geq R \text{  ,  Result measured in meters}
+\end{align*}
 
 \subsection{}
 In problem d.i, I had not distributed the sum to both the numerator and denominator of the fraction, which caused issues in the computation of $n$. The results for $n$ were outside the normal range, which led me to recompute the equations.

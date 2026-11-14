@@ -114,7 +114,7 @@ legend('Measurements', sprintf('Fit, n = %.2f', nA_hat), ...
        sprintf('Typical urban, n = %.2f', n_typical), 'Location', 'northwest');
 
 d_plot_B = logspace(0, log10(50), 400);
-PL_plot_B = PL0B_dB + 10*3.5*%nB_hat%*log10(d_plot_B/d0B);
+PL_plot_B = PL0B_dB + 10*nB_hat*log10(d_plot_B/d0B);
 
 figure;
 semilogx(dB_m, LB, 'o'); hold on; grid on;
